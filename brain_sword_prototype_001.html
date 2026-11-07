@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BRAIN SWORD | 会話イベント001</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080b12;color:white;font-family:system-ui,-apple-system,"Yu Gothic",sans-serif;display:grid;place-items:center;min-height:100vh;padding:10px}
+.game{position:relative;width:min(100%,430px);height:min(94dvh,900px);min-height:650px;overflow:hidden;border:1px solid #777;border-radius:18px;background:linear-gradient(#8d9b9b,#e0c59c 42%,#563622 43%,#291b16);box-shadow:0 15px 60px #000}
+.sign{position:absolute;top:4%;left:50%;transform:translateX(-50%);background:#ead6a9;color:#38251a;border:4px double #68452c;padding:8px 20px;font-weight:900;letter-spacing:.15em;white-space:nowrap}
+.top{position:absolute;top:13%;left:14px;right:14px;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.1em;text-shadow:0 2px 5px #000}
+.shelves{position:absolute;top:19%;height:45%;left:0;right:0;background:repeating-linear-gradient(180deg,#342017 0 9px,#9b653b 10px 17px,#38241a 18px 25px);border-block:5px solid #271811}
+.shelves:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 8% 16%,#d8a94d 0 8px,transparent 9px),radial-gradient(circle at 23% 16%,#bd5345 0 9px,transparent 10px),radial-gradient(circle at 39% 16%,#83a68b 0 8px,transparent 9px),radial-gradient(circle at 56% 16%,#e4c77c 0 9px,transparent 10px),radial-gradient(circle at 74% 16%,#b76d9b 0 9px,transparent 10px),radial-gradient(circle at 90% 16%,#d7a94b 0 8px,transparent 9px),radial-gradient(circle at 12% 56%,#e0b95d 0 9px,transparent 10px),radial-gradient(circle at 33% 56%,#b44d42 0 9px,transparent 10px),radial-gradient(circle at 58% 56%,#76a18b 0 9px,transparent 10px),radial-gradient(circle at 82% 56%,#d6a54e 0 9px,transparent 10px)}
+.counter{position:absolute;bottom:27%;left:-5%;width:110%;height:12%;background:linear-gradient(#b77a45,#4a2b1a 22%,#2b1b14);border-top:5px solid #d19b5b}
+.character{position:absolute;bottom:25%;left:50%;transform:translateX(-50%);width:64%;height:47%;filter:drop-shadow(0 8px 12px #0008)}
+.hair{position:absolute;top:0;left:18%;width:64%;height:42%;border-radius:48% 48% 32% 32%;background:var(--hair,#d9dce8)}
+.face{position:absolute;top:10%;left:26%;width:48%;height:29%;border-radius:45%;background:#f1c9b3;z-index:2}
+.face:before,.face:after{content:"";position:absolute;top:49%;width:6px;height:4px;border-radius:50%;background:#49372f}.face:before{left:25%}.face:after{right:25%}
+.body{position:absolute;bottom:0;left:5%;width:90%;height:65%;border-radius:42% 42% 10% 10%;background:var(--outfit,#e8edf4);border:5px solid #ffffff55}
+.body:after{content:"";position:absolute;top:12%;left:46%;height:48%;width:9%;background:#31415a}
+.accessory{position:absolute;top:3%;left:12%;width:76%;height:12%;border-radius:50%;background:var(--accent,#587ca5);border:3px solid #ddd}
+.ren{--hair:#292d46;--outfit:#273752;--accent:#28334c}.akari{--hair:#ed8eaa;--outfit:#8c2942;--accent:#a3334a}.newko{--hair:#91c6a0;--outfit:#d8eadc;--accent:#579b79}
+.name{position:absolute;bottom:24%;left:16px;background:#101722ed;border-left:4px solid #f2c879;padding:8px 13px;font-weight:800;min-width:110px}
+.dialog{position:absolute;bottom:3%;left:12px;right:12px;background:#080c14e8;border:1px solid #ffffff55;border-radius:12px;padding:14px 15px;backdrop-filter:blur(8px)}
+.dialog p{font-size:17px;line-height:1.65;min-height:3.3em;margin:6px 0 12px}.controls{display:flex;align-items:center;justify-content:space-between;gap:8px}
+button{background:#29374d;color:white;border:1px solid #8293aa;border-radius:7px;padding:9px 13px;font-size:12px}.primary{background:#896137;border-color:#e6bd78;font-weight:800;min-width:100px}.progress{font-size:11px;color:#bac3d1}
+.log{display:none;position:absolute;z-index:5;inset:10% 5% 24%;overflow:auto;background:#101722f5;border:1px solid #8b9ab0;border-radius:12px;padding:16px}.log h3{color:#f2c879}.log p{font-size:13px;line-height:1.5;border-bottom:1px solid #ffffff22;padding-bottom:8px}
+</style>
+<main class="game">
+<div class="sign">駄菓子屋 山田</div><div class="top"><span>◉ BRAIN SWORD</span><span>DAY 01　15:42</span></div>
+<div class="shelves"></div><div class="counter"></div>
+<div id="character" class="character"><div class="hair"></div><div class="face"></div><div class="body"></div><div class="accessory"></div></div>
+<div class="name" id="name">シロ</div>
+<section class="dialog"><p id="line">……今日は誰も帰ろうとしないね。</p><div class="controls"><button id="logBtn">LOG</button><span class="progress" id="progress">01 / 12</span><button id="next" class="primary">次へ ▶</button></div></section>
+<aside class="log" id="log"><h3>会話ログ</h3><div id="logContent"></div><button id="closeLog">閉じる</button></aside>
+</main>
+<script>
+const lines=[
+["シロ","……今日は誰も帰ろうとしないね。","shiro"],
+["レン","ポテチが残ってるから。","ren"],
+["アカリ","それ、私が買ってきたやつだからね！","akari"],
+["シロ","別に取らないよ。","shiro"],
+["レン","今、シロの手が袋に向かってた。","ren"],
+["アカリ","見逃さないよ。そういうところは。","akari"],
+["ニュー子緑","みんな、そんなにお菓子が好きなの？","newko"],
+["アカリ","好きというか、ここにいる理由かな。","akari"],
+["レン","理由なんて、なくてもいいけど。","ren"],
+["山田のおばちゃん","ほら、みかんも食べな。おまけやよ。","shiro"],
+["シロ","……ありがとう。","shiro"],
+["アカリ","ねえ、次は何買う？","akari"]];
+let i=0;const el=id=>document.getElementById(id);
+function draw(){let [n,t,c]=lines[i];el("name").textContent=n;el("line").textContent=t;el("character").className="character "+c;el("progress").textContent=String(i+1).padStart(2,"0")+" / "+lines.length;el("next").textContent=i===lines.length-1?"もう一度 ↻":"次へ ▶"}
+function next(){i=i===lines.length-1?0:i+1;draw()}
+el("next").onclick=next;el("logBtn").onclick=()=>{el("logContent").innerHTML=lines.slice(0,i+1).map(x=>"<p><b>"+x[0]+"</b><br>"+x[1]+"</p>").join("");el("log").style.display="block"};el("closeLog").onclick=()=>el("log").style.display="none";
+document.onkeydown=e=>{if((e.key===" "||e.key==="Enter")&&el("log").style.display!=="block")next();if(e.key==="Escape")el("log").style.display="none"};draw();
+</script></main>
